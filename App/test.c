@@ -1,181 +1,82 @@
 #include "headers.h"
 
-char *GetTeacher(int code)
+// //TODO 
+// Changer password
+// hide password
+// modifier user
+int MenuPrincipal (int code)
 {
-    FILE *infile; 
-    static char teacher[200];
-	
-    struct AdmTeacher input;
-    	
-		infile = fopen ("AdministrationProf.bin", "rb"); 
-	if (infile == NULL) 
-	{ 
-		fprintf(stderr, "\nError opening file\n"); 
-		exit (1); 
-	} 
-	
-	while(fread(&input,sizeof(struct AdmTeacher), 1, infile)) 
-    {
-        if (code = input.Code)
-            {
-                strcpy(teacher,input.Prenom);
-                strcat(teacher," ");
-                strcat(teacher,input.Nom);
-                fclose (infile);
-                return teacher;
-            }
-    }
-    printf("Professeur introuvable\n");
-    
-    printf("Choisissez 1 pour reessayer ou 2 saisir le nom du professeur\n");
-    int test;
-    test = Choix(1, 2, "Veuillez entrer '1' ou '2'");
-    if (test==1)
-    {
-        GetTeacher(code);
-    }
-    strcpy(teacher,GetString());
-    fclose (infile);
-    return NULL;
-		 
+    printf("1. Menu 01 : Gestion des accès\n");
+    printf("2. Menu 02 : Cours\n");
+    printf("3. Menu 03 : Administration et comptabilité\n");
+    printf("4. Menu 04 : Bibliothèque\n");
+    printf("5. Menu 05 : Quitter le programme\n");
 }
-
-
-
-int AddCourse()
+int MenuGestionAccess(int code)//?????
 {
-    struct Cours NewCourse;
-    int test;
-    int test1;
-    char prof[300];
-    NewCourse.Code = GetLastID(2) + 1;//
-    printf("Entrez le Titre Du cours : ");
-    strcpy(NewCourse.Titre, GetString());
-    printf("Choisissez une Faculte. \n");
-    printf("0 : Faculté des Sciences Économiques et Administratives (FSEA)\n1 : Faculté des Sciences, de Génie et d'Architecture (FSGA)\n2 : Faculté des Sciences de l’Agriculture et de l’Environnement (FSAE)\n3 : Faculté des Sciences Juridiques et Politiques (FSJP)\n4 : Faculté des Sciences de l'Education (FSED)\n5 : Faculté des Sciences de la Santé (FSSA)\n");
-    test = Choix(0, 5, "Veuillez choisir par la liste!");
-    switch (test)
-    {
-    case 0:
-        strcpy(NewCourse.Faculte, "FSEA");
-        break;
-    case 1:
-        strcpy(NewCourse.Faculte, "FSGA");
-        break;
-    case 2:
-        strcpy(NewCourse.Faculte, "FSAE");
-        break;
-    case 3:
-        strcpy(NewCourse.Faculte, "FSJP");
-        break;
-    case 4:
-        strcpy(NewCourse.Faculte, "FSED");
-        break;
-    case 5:
-        strcpy(NewCourse.Faculte, "FSSA");
-        break;
-    }
-    printf("Choisissez le Type du cours. \n");
-    printf("0 : Obligatoire\n1 : Optionnel\n");
-    test = Choix(0, 1, "Veuillez choisir parmis la liste!");
-    switch (test)
-    {
-    case 0:
-        strcpy(NewCourse.Type, "Obligatoire");
-        break;
-    case 1:
-        strcpy(NewCourse.Type, "Optionnel");
-        break;
-    }
-    test = 0;
-    printf("Veuillez entrer le nombre de credit du cours (max 20)\n");
-    NewCourse.NbCredit = Choix(1, 20, "Veuillez choisir un nmbre de credit entre 1 et 20!");
-    test = 0;
-    printf("Entrez le nombre de professeur (1 ou 2):");
-    
-    test = Choix(1, 2, "Veuillez entrer '1' ou '2'");
-    if (test == 1)
-    {
-        printf("Entrez le code du professeur  : ");        
-        test1 = Choix(1, 9999, "Veuillez verifier le format du code!");
-        strcpy(NewCourse.Prof1, GetTeacher(test1));
-        
-    }
-    else
-    {
-        printf("Entrez le code du professeur 1: ");
-        test1 = Choix(1, 9999, "Veuillez verifier le format du code!");
-        strcpy(NewCourse.Prof1, GetTeacher(test1));
-        test1=0;
-        printf("Entrez le code du professeur 2: ");
-         test1 = Choix(1, 9999, "Veuillez verifier le format du code!");
-        strcpy(NewCourse.Prof2, GetTeacher(test1));
-    }
-
-    printf("Code : %d\nTitre : %s\nFaculte : %s\nType :%s\nCredit : %d\nProf : %s\n", NewCourse.Code, NewCourse.Titre, NewCourse.Faculte, NewCourse.Type, NewCourse.NbCredit,NewCourse.Prof1);
-    AdmCours(NewCourse.Code, NewCourse.Titre, NewCourse.Faculte, NewCourse.NbCredit);
-    FILE *outfile;
-
-    // open file for writing
-    outfile = fopen("Cours.bin", "ab");
-    if (outfile == NULL)
-    {
-        fprintf(stderr, "\nError opend file\n");
-        exit(1);
-    }
-
-    // write struct to file
-    fwrite(&NewCourse, sizeof(struct Cours), 1, outfile);
-
-    if (fwrite != 0)
-        printf("Votre Cours a ete enregistre avec succes.\n");
-    else
-        printf("Erreurs lors de l'enregistrement.\n");
-
-    // close file
-    fclose(outfile);
-}
-
-
-int AdmProf(int code , char *nom ,char *prenom,int NbrCours)
-{
-    struct AdmTeacher input;
-    input.Code = code;
-    strcpy(input.Nom, nom);
-    strcpy(input.Prenom, prenom);
-    input.Nbcours = NbrCours;   
-
-    printf("Veuillez entrer le Salaire.");
-    strcpy(input.Salaire, MoneyTester());
-    printf("Veuillez entrer le nombre de Credit.");
-    input.Nbcredit = Choix(1,100,"Choisissez une valeur de credit entre 1 et 100");
-    
-
-     FILE *outfile; 
-	
-	// open file for writing 
-	outfile = fopen ("AdministrationProf.bin", "ab"); 
-	if (outfile == NULL) 
-	{ 
-		fprintf(stderr, "\nError opend file\n"); 
-		exit (1); 
-	} 
-
-	printf ("---Infos------\n -%d\n-%s\n-%s\n-%s\n-%d\n-%d\n",input.Code,input.Nom,input.Prenom,input.Salaire,input.Nbcours,input.Nbcredit);
-	// write struct to file 
-	fwrite (&input, sizeof(struct AdmTeacher), 1, outfile); 
-	
-	if(fwrite != 0) 
-		printf("Enregistrement realise avec succes.\n"); 
-	else
-		printf("Erreurs lors de l'enregistrement.\n"); 
-
-	// close file 
-	fclose (outfile); 
+    printf("1. Menu 01 : Lister les Administrateurs\n");
+    printf("2. Menu 02 : Lister les Etudiants\n");
+    printf("3. Menu 03 : Lister les Agents AdministratifS\n");
+    printf("4. Menu 04 : Lister les Bibliothécaires\n");
+    printf("5. Menu 05 : Modifier un mot de passe\n"); 
+    printf("6. Menu 06 : Sortir\n"); 
 
 }
 
+int MenuCours(int code)
+{
+    printf("1. Menu 01 : Afficher les cours\n");
+    printf("2. Menu 02 : Afficher les informations sur un cours\n");
+    printf("3. Menu 03 : Ajouter un cours\n");
+    printf("4. Menu 04 : Modifier un cours\n");
+    printf("5. Menu 05 : Sortir\n"); 
 
+}
 
+int MenuOuvrage(int code)
+{
+    printf("1. Menu 01 : Afficher les catégories\n");
+    printf("2. Menu 02 : Afficher les ouvrages\n");
+    printf("3. Menu 03 : Ajouter un ouvrage\n");
+    printf("4. Menu 04 : Emprunter un ouvrage\n");
+    printf("5. Menu 05 : Retourner un ouvrage\n"); 
+    printf("6. Menu 06 : Sortir\n"); 
 
+}
 
+int MenuAdmComp(int code)
+{
+    printf("1. Menu 01 : Gestion des professeurs\n");
+    printf("2. Menu 02 : Gestion des étudiants\n");
+    printf("3. Menu 03 : Gestion du personnel administratif\n");
+    printf("4. Menu 04 : Modifier un cours\n");
+    printf("5. Menu 05 : Sortir\n"); 
+
+}
+int SubMenuAdmProf(int code)
+{
+    printf("1. Menu 01 : Ajustement Salarial\n");
+    printf("2. Menu 02 : Ajustement du nombre de Credit\n");
+    printf("3. Menu 03 : Sortir\n"); 
+
+}
+
+int SubMenuAdmStud(int code)
+{
+    printf("1. Menu 01 : Ajustement de la Balance\n");
+    printf("2. Menu 02 : Ajustement de la date de paiement\n");
+    printf("3. Menu 03 : Sortir\n"); 
+
+}
+
+int SubMenuAdmPers(int code)
+{
+    printf("1. Menu 01 : Ajustement Salarial\n");
+    printf("2. Menu 02 : Sortir\n"); 
+}
+
+int SubMenuAdmCours(int code)
+{
+    printf("1. Menu 01 : Ajustement du cout\n");
+    printf("2. Menu 02 : Sortir\n"); 
+}

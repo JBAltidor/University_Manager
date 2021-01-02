@@ -75,9 +75,6 @@ char Fonction[100];
 char Salaire[100];
 };
 
-
-
-
 struct Bibliothecaire
 {
 int Code ;
@@ -123,9 +120,14 @@ char DateRetour[100];
 int CodeEmp;
 char NomEmp[100];
 char PrenomEmp[100];
-char Statut[100];
+int Statut; //1: Disponible 0:Indisponible
 };
 
+struct NomComplet 
+{
+    char nom[100];
+    char prenom[100];
+};
 
 
 int GetLastID(int fileCode); // fileCode : 1= Utilisateur.bin 2 = Cours.bin
@@ -150,3 +152,8 @@ char *GetDate();
 int AddBook();
 char *GetTeacher(int code);
 int AdmProf(int code , char *nom ,char *prenom,int NbrCours);
+
+struct NomComplet getFullName(int code );
+int CheckBookAvailable (int code);
+int CheckBookAvailableR(int code);
+int Retour (int codeUser ,int codeBook);
