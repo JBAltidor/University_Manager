@@ -2,9 +2,11 @@
 int main(int argc, char *argv[])
  { 
 
-    
+   
 	 AddUser();
-	 ReadFileUser();
+	//  ReadFileUser();
+	AddCourse();
+	//AddBook();
 
 
 	return 0; 

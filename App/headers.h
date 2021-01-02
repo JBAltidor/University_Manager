@@ -8,32 +8,52 @@ struct Utilisateur
 {
 int Code;
 char NIF[20];
-char Nom[50];
-char Prenom[50];
-char Password[50];
+char Nom[100];
+char Prenom[100];
+char Password[100];
 char Date[20];
-char Type[20];
-char Categorie[20]; 
+char Type[100];
+char Categorie[100]; 
 int Module;//0=adm 1= etudiant , 2 = professeur , 3= comptable , 4 = agent administratif , 5= bibliothecaire
 };
 
 struct Student
 {
 int Code;
-char Faculte[50];
+char Faculte[100];
 char Section[100];
 int Session;
 int AnneeAdm;
 };
 
+struct AdmStudent
+{
+int Code;
+char NomEtud[100];
+char PrenomEtud[100];
+char Faculte[100];
+char Date[100];
+char Montant[100];
+};
+
 struct Teacher
 {
 int Code;
-char Faculte[50];
+char Faculte[100];
 char Section[100];
 char Type[100];
 int Nbcours;
-char Cours[100];
+char Cours[300];
+};
+
+struct AdmTeacher
+{
+int Code;
+char Nom[100];
+char Prenom[100];
+int Nbcours;
+int Nbcredit;
+char Salaire[100];
 };
 
 struct PersonAdm
@@ -42,20 +62,73 @@ int Code ;
 char Affectation[100];
 char Poste[100];
 int Annee;
-char Superieur[50];
+char Superieur[100];
 };
+
+struct AdmPers
+{
+int Code ;
+char NomEmp[100];
+char PrenomEmp[100];
+char Direction[100];
+char Fonction[100];
+char Salaire[100];
+};
+
+
+
 
 struct Bibliothecaire
 {
 int Code ;
 char Niveau[100];
 int Annee;
-char Superieur[50];
+char Superieur[100];
+};
+
+struct Cours 
+{
+int Code;
+char Titre[100];
+char Faculte[100];
+char Type[100]; //Obligatoire ou optionel
+int NbCredit;
+char Prof1[100];
+char Prof2[100];
+};
+
+struct AdmCours 
+{
+int Code;
+char Titre[100];
+char Faculte[100];
+int NbCredit;
+char Cout[100];
+};
+
+struct Ouvrage
+{
+int Code;
+char Categorie[100];
+char Titre[100];
+char Edition[100];
+int Annee;
+char Auteur1[100];
+char Auteur2[100];
+int NbPage;
+char DateEntre[100];
+char DateSortie[100];
+char DateRetour[100];
+
+int CodeEmp;
+char NomEmp[100];
+char PrenomEmp[100];
+char Statut[100];
 };
 
 
 
-int GetLastID(int fileCode); // fileCode : 1= Utilisateur.dat
+int GetLastID(int fileCode); // fileCode : 1= Utilisateur.bin 2 = Cours.bin
 int GetAccess ();
 void clean_stdin(void);
 char *GetNIF();
@@ -64,6 +137,16 @@ int inputManager();
 int Choix(int min,int max , char *warning);
 int AddUser ();
 void ReadFileUser();
-int AddStudent (int id );
-int AddTeacher (int id );
-int AddPersonnel (int id);
+int AddStudent (int id , char *nom ,char *prenom);
+int AddTeacher (int id , char *nom ,char *prenom);
+int AddPersonnel (int id , char *nom ,char *prenom);
+int AddBibliothecaire (int id);
+int AddCourse ();
+char * MoneyTester() ;
+int AdmCours(int code , char *titre ,char *fac,int credit);
+int AdmPers(int code , char *nom ,char *prenom,char *direction,char *fonction);
+int AdmEtud(int code , char *nom ,char *prenom,char *faculte);
+char *GetDate();
+int AddBook();
+char *GetTeacher(int code);
+int AdmProf(int code , char *nom ,char *prenom,int NbrCours);
