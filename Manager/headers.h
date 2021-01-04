@@ -1,10 +1,14 @@
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <string.h> 
-#include <time.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <windows.h>
+#include <conio.h>
+#include <dos.h>
 
 
-struct Utilisateur 
+
+struct Utilisateur
 {
 int Code;
 char NIF[20];
@@ -13,7 +17,7 @@ char Prenom[100];
 char Password[100];
 char Date[20];
 char Type[100];
-char Categorie[100]; 
+char Categorie[100];
 int Module;//0=adm 1= etudiant , 2 = professeur , 3 = agent administratif , 4= bibliothecaire
 };
 
@@ -83,7 +87,7 @@ int Annee;
 char Superieur[100];
 };
 
-struct Cours 
+struct Cours
 {
 int Code;
 char Titre[100];
@@ -94,7 +98,7 @@ char Prof1[100];
 char Prof2[100];
 };
 
-struct AdmCours 
+struct AdmCours
 {
 int Code;
 char Titre[100];
@@ -123,7 +127,7 @@ char PrenomEmp[100];
 int Statut; //1: Disponible 0:Indisponible
 };
 
-struct NomComplet 
+struct NomComplet
 {
     char nom[100];
     char prenom[100];
@@ -131,7 +135,7 @@ struct NomComplet
 
 
 int GetLastID(int fileCode); // fileCode : 1= Utilisateur.bin 2 = Cours.bin
-int GetAccess ();
+int GetAccess ( );
 void clean_stdin(void);
 char *GetNIF();
 char *GetString();
@@ -157,4 +161,23 @@ struct NomComplet getFullName(int code );
 int CheckBookAvailable (int code);
 int CheckBookAvailableR(int code);
 int Retour (int codeUser ,int codeBook);
-void Report (int fileCode);
+int ChangePassword(int id);
+int CheckUserAvailability (int id);
+//________________________________Graphics
+char * GetPassword();
+void SetColor(int ForgC);
+void ClearConsoleToColors(int ForgC, int BackC);
+void SetColorAndBackground(int ForgC, int BackC);
+void drawRectangle();
+void clearWindow();
+void clearMainWindow();
+void window();
+int main_window();
+int Start();
+void print_heading(const char st[]);
+void GAccess(int choix);
+void PrintCours(int code);
+void GCours(int choix);
+int Choix2(int min,int max , char *warning,int x,int y);
+char * MoneyTester2(int a) ;
+void GAdminPerson (int choix);

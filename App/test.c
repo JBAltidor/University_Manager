@@ -80,3 +80,53 @@ int SubMenuAdmCours(int code)
     printf("1. Menu 01 : Ajustement du cout\n");
     printf("2. Menu 02 : Sortir\n"); 
 }
+
+void Report (int fileCode)
+{
+    FILE *infile,*temp; 
+	char file[20];	
+
+	struct Utilisateur input; 
+
+	
+    infile = fopen ("Utilisateur.bin", "rb"); 
+    temp = fopen("Report.txt","w");
+	if (infile == NULL) 
+	{ 
+		fprintf(stderr, "\nError opening file\n"); 
+		exit (1); 
+	}
+	fprintf(temp,"Code\tPrenom\tNom\t\n");	
+	
+	while(fread(&input,sizeof(struct Utilisateur), 1, infile)) 
+    {
+        if (input.Module == fileCode)
+        {
+            fprintf(temp,"%d\t\t%s\t\t%s\n",input.Code,input.Prenom,input.Nom);
+        }
+
+    }
+    fclose(infile);
+    fclose(temp);
+    switch (fileCode)
+    {
+    case 0:
+        rename("Report.txt","ReportAdmin.txt");
+        break;
+    case 1:
+        rename("Report.txt","ReportEtudiant.txt");
+        break;
+    case 2:
+        rename("Report.txt","ReportProfesseurs.txt");
+        break;
+    case 3:
+        rename("Report.txt","ReportPersonnelAdministratif.txt");
+        break;
+    case 4:
+        rename("Report.txt","ReportBibliothecaire.txt");
+        break;    
+    }
+		
+
+	
+}

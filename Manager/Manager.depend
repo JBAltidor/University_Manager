@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1609642795 source:c:\users\alt\documents\manager\main.c
+	"headers.h"
+
+1609713796 c:\users\alt\documents\manager\headers.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<windows.h>
+	<conio.h>
+	<dos.h>
+
+1609624273 source:c:\users\alt\documents\manager\template.c
+	"headers.h"
+
+1609711391 source:c:\users\alt\documents\manager\test.c
+	"headers.h"
+
+1609645222 source:c:\users\alt\documents\manager\functions.c
+	"headers.h"
+
+1609710674 source:c:\users\alt\documents\manager\graphicfunctions.c
+	"headers.h"
+
