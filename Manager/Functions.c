@@ -81,7 +81,11 @@ char * GetNIF()
     int d1, d2, d3,d4;
     int val;
     static char NIF[20];
-    printf("Entrez le NIF en format :xxx-xxx-xxx-x: ");
+    gotoxy(1,26);printf("                                                            ");
+    gotoxy(1,27);printf("                                                            ");
+
+   gotoxy(1,26); printf("Entrez NIF/CIN en format xxx-xxx-xxx-x:");
+
     val = scanf("%d-%d-%d-%d", &d1, &d2, &d3 , &d4);
     // check if scanf was successful
     if(val == 4)
@@ -90,7 +94,8 @@ char * GetNIF()
 	  return NIF;
     }
     clean_stdin();
-    printf("\nFormat de NIF invalid, veuillez reesayer!\n");
+    gotoxy(1,26);printf("Format de NIF/CIN invalid, veuillez reesayer!");
+    gotoxy(1,27);printf("Pressez 'Enter' pour reessayer");
     GetNIF();
 
 }
@@ -143,14 +148,16 @@ int GetLastID(int fileCode)
 
 char *GetString()
 {
+
     static char text[100];
     fflush(stdin);
     //printf(">>");
     //clean_stdin();
      if (fgets(text, 100, stdin) == NULL)
      {
-      printf("Ce champ est obligatoire .");
+     gotoxy(1,27); printf("Ce champ est obligatoire .");
 	  clean_stdin();
+	  gotoxy(1,27); printf("                        ");
       GetString();
      }
      strtok(text, "\n");
@@ -195,6 +202,7 @@ int GetAccess (  )
 
 	while(fread(&input,sizeof(struct Utilisateur), 1, infile))
 	{
+
 
 		if (id ==input.Code )
 		{
@@ -250,19 +258,35 @@ struct Utilisateur NewUser;
 int test;
 
 NewUser.Code = GetLastID(1)+1;
-strcpy(NewUser.NIF,GetNIF());
-clean_stdin();
-printf("Entrez le Nom : ");
+gotoxy(37,10);printf("Code Utilisateur : %d",GetLastID(1));
+
+gotoxy(1,26);strcpy(NewUser.NIF,GetNIF());
+
+gotoxy(1,26);printf("                                                                    ");
+
+gotoxy(37,11);printf("NIF/CIN       : %s",NewUser.NIF);
+
+gotoxy(1,26);printf("Entrez le Nom : ");
 strcpy(NewUser.Nom,GetString());
-printf("Entrez le Prenom : ");
+gotoxy(37,12);printf("Nom             :%s",NewUser.Nom);
+gotoxy(1,26);printf("                                               ");
+
+gotoxy(1,26);printf("Entrez le Prenom : ");
 strcpy(NewUser.Prenom,GetString());
-printf("Entrez le Mot de Passe : ");
-strcpy(NewUser.Password,GetString());
+gotoxy(1,26);printf("                                               ");
+gotoxy(37,13);printf("Prenom           : %s",NewUser.Prenom);
+gotoxy(1,26);printf("                                               ");
+
+gotoxy(1,26);printf("Entrez le Mot de Passe : ");
+strcpy(NewUser.Password,GetPassword());
+gotoxy(1,26);printf("                                               ");
+gotoxy(37,14);printf("Mot de Passe    : ******");
 strcpy(NewUser.Date,Today());
+gotoxy(37,15);printf("Date            : %s",NewUser.Date);
 
-printf("Choisissez une categorie. \n");
-printf("0 : Administrateur\n1 : Etudiant(e)\n2 : Professeur\n3 : Agent administratif\n4 : Bibliothecaire\n");
-
+gotoxy(1,26);printf("Choisissez une categorie.");
+gotoxy(1,27);printf("0 : Administrateur 1-Etudiant(e) 2-Professeur 3-Agent administratif 4-Bibliothecaire");
+gotoxy(1,28);printf(">>");
 test=Choix(0,4,"Veuillez choisir par la liste!");
 NewUser.Module =test;
 
@@ -270,39 +294,44 @@ if (test== 0)
    strcpy(NewUser.Type, "Administrateur");
    else
    strcpy(NewUser.Type, "Utilisateur");
+gotoxy(1,26);printf("                                                                                                                           ");
+    gotoxy(1,27);printf("                                                                                                                           ");
+    gotoxy(1,28);printf("                                                                                                                ");
+
+gotoxy(37,16);printf("Type            : %s",NewUser.Type);
+
+
+
+
+
 
 switch ((test))
    {
    case 0:
        strcpy(NewUser.Categorie, "Administrateur");
+       gotoxy(37,17);printf("Categorie         : %s",NewUser.Categorie);
        break;
    case 1:
        strcpy(NewUser.Categorie, "Etudiant(e)");
+        gotoxy(37,17);printf("Categorie         : %s",NewUser.Categorie);
 	   AddStudent(NewUser.Code,NewUser.Nom,NewUser.Prenom);
        break;
    case 2:
        strcpy(NewUser.Categorie, "Professeur");
+        gotoxy(37,17);printf("Categorie         : %s",NewUser.Categorie);
 	   AddTeacher(NewUser.Code,NewUser.Nom,NewUser.Prenom);
        break;
     case 3:
        strcpy(NewUser.Categorie, "Agent Administratif");
+        gotoxy(37,17);printf("Categorie         : %s",NewUser.Categorie);
        AddPersonnel (NewUser.Code,NewUser.Nom,NewUser.Prenom);
        break;
     case 4:
        strcpy(NewUser.Categorie, "Bibliothecaire");
+        gotoxy(37,17);printf("Categorie         : %s",NewUser.Categorie);
        AddBibliothecaire (NewUser.Code);
        break;
    }
-
-
-// printf("New User infos: \n");
-//  printf("Code :%d\n",NewUser.Code);
-//         printf("Nom :%s\n",NewUser.Nom);
-//         printf("Prenom :%s\n",NewUser.Prenom);
-//         printf("NIF-CIN :%s\n",NewUser.NIF);
-//         printf("Type:%s\n",NewUser.Type);
-//         printf("Categorie :%s\n",NewUser.Categorie);
-//         printf("Module : %d\n",NewUser.Module);
 
 
 FILE *outfile;
@@ -320,9 +349,13 @@ FILE *outfile;
 	fwrite (&NewUser, sizeof(struct Utilisateur), 1, outfile);
 
 	if(fwrite != 0)
-		printf("Votre utilisateur a ete enregistre avec succes. Code : %d\n",NewUser.Code);
+		{gotoxy(1,26);printf("Votre utilisateur a ete enregistre avec succes. Code : %d",NewUser.Code);
+		gotoxy(1,26);printf("                                                                                               ");
+		}
 	else
-		printf("Erreurs lors de l'enregistrement.\n");
+		{gotoxy(1,26);printf("Erreurs lors de l'enregistrement.");
+		gotoxy(1,27);printf("                                                                                               ");
+		}
 
 	// close file
 	fclose (outfile);
@@ -344,176 +377,404 @@ int AddStudent (int id , char *nom ,char *prenom )
     // printf("Current year = %d\n",(current_time->tm_year + 1900));
 
     NewUser.Code = id;
-    printf("Veullez entrer la session (max 20) \n");
-    NewUser.Session=Choix(1,20,"Veuillez choisir un nombre entre 1 et 20!\n");
-    printf("Veuillez entrer l'annee d'admission\n");
+    gotoxy(1,26);printf("Veullez entrer la session (max 20) :  ");
+    NewUser.Session=Choix(1,20,"Veuillez choisir un nombre entre 1 et 20!");
+    gotoxy(37,18);printf("Session         : %d",NewUser.Session);
+    gotoxy(1,26);printf("                                                                                   ");
+    gotoxy(1,27);printf("                                                                                               ");
+    gotoxy(1,26);printf("Veuillez entrer l'annee d'admission : ");
     NewUser.AnneeAdm=Choix(1988,cur,"Veuillez entrer une annee entre 1988 et l'annee actuelle!");
-
-    printf("Choisissez une Faculte. \n");
-    printf("0 : Faculté des Sciences Économiques et Administratives (FSEA)\n1 : Faculté des Sciences, de Génie et d'Architecture (FSGA)\n2 : Faculté des Sciences de l’Agriculture et de l’Environnement (FSAE)\n3 : Faculté des Sciences Juridiques et Politiques (FSJP)\n4 : Faculté des Sciences de l'Education (FSED)\n5 : Faculté des Sciences de la Santé (FSSA)\n");
-    test=Choix(0,5,"Veuillez choisir par la liste!");
+    gotoxy(37,19);printf("Session         : %d",NewUser.AnneeAdm);
+    gotoxy(1,26);printf("                                                                                                ");
+    gotoxy(1,27);printf("                                                                                             ");
+    gotoxy(1,26);printf("Choisissez une Faculte.");
+    gotoxy(1,27);printf("0-FSEA  1-FSGA 2-FSAE 3-FSJP 4-FSED 5-FSSA");
+    gotoxy(1,28);printf(">>");
+   test=Choix(0,5,"Veuillez choisir par la liste!");
+    gotoxy(1,26);printf("                                                                                                                                                                                              ");
+    gotoxy(1,27);printf("                                                                                                                                                                                                       ");
+    gotoxy(1,28);printf("                                                                                                                                                                                             ");
 
 switch ((test))
    {
    case 0:
+
        strcpy(NewUser.Faculte, "FSEA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Gestion des Ressources humaines\n1 : Gestion des Affaires\n2 :Comptabilité de Management \n3 : Micro finance\n4 : Gestion de Projet\n5 :Marketing \n6 : Sciences économiques\n7 : Sciences administratives-PME\n8 : Sciences administratives-Sciences comptables\n9 : Sciences administratives-Gestion touristique\n10 : Sciences administratives-Gestion des institutions financières\n");
-        printf("11 : Sciences administratives-Finance\n12 : Maîtrise en comptabilité:Contrôle-Audit\n13 : Maîtrise en gestion de projet\n");
-       test2=Choix(0,13,"Veuillez choisir par la liste!");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+      gotoxy(1,26); printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("1-Gestion des Ressources humaines 2-Gestion des Affaires 3-Comptabilite de Management 4-Micro finance");
+      gotoxy(1,28); printf("5-Gestion de Projet 6-Marketing 7-Sciences economiques 8-Sciences administratives-PME 9-Sciences administratives-Sciences comptables");
+      gotoxy(1,29);printf("10-Sciences administratives-Gestion touristique1 1-Sciences administratives-Gestion des institutions financieres");
+      gotoxy(1,30);printf("12-Sciences administratives-Finance 13-Maitrise en comptabilite:Controle-Audit 14-Maîtrise en gestion de projet");
+      gotoxy(1,31); test2=Choix(1,14,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Gestion des Ressources humaines");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Gestion des Affaires");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Comptabilité de Management");
+            strcpy(NewUser.Section, "Comptabilite de Management");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
             strcpy(NewUser.Section, "Micro finance");
             break;
         case 4:
             strcpy(NewUser.Section, "Gestion de Projet");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 5:
             strcpy(NewUser.Section, "Marketing");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 6:
-            strcpy(NewUser.Section, "Sciences économiques");
+            strcpy(NewUser.Section, "Sciences economiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 7:
             strcpy(NewUser.Section, "Sciences administratives-PME");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 8:
-            strcpy(NewUser.Section, "Sciences administratives-Sciences comptables");
+            strcpy(NewUser.Section, "Sciences Adm-Sciences comptables");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 9:
-            strcpy(NewUser.Section, "Sciences administratives-Gestion touristique");
+            strcpy(NewUser.Section, "Sciences Adm-Gestion touristique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 10:
-            strcpy(NewUser.Section, "Sciences administratives-Gestion des institutions financières");
+            strcpy(NewUser.Section, "Sciences Adm-Gestion institutions financieres");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 11:
-            strcpy(NewUser.Section, "Sciences administratives-Finance");
+            strcpy(NewUser.Section, "Sciences Adm-Finance");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 12:
-            strcpy(NewUser.Section, "Maîtrise en comptabilité:Contrôle-Audit");
+            strcpy(NewUser.Section, "Maitrise en comptabilite:Controle-Audit");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 13:
-            strcpy(NewUser.Section, "Maîtrise en gestion de projet");
+            strcpy(NewUser.Section, "Maitrise en gestion de projet");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
    case 1:
        strcpy(NewUser.Faculte, "FSGA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Certificat en Informatique\n1 : Licence en Génie Informatique\n2 : Licence en Génie Civil\n3 : Licence en Génie Électrique-Energie électrique\n4 : Licence en Génie Électrique-Télécommunications\n5 : Licence en Génie Industriel \n6 : Licence en Architecture\n7 : Licence en Génie de l'Environnement\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+      gotoxy(1,27); printf("0-Certificat en Informatique 1-Licence en Genie Informatique 2-Licence en Genie Civil 3-Licence en Genie Électrique-Energie electrique");
+      gotoxy(1,28); printf("4-Licence en Genie Electrique-Telecommunications 5-Licence en Genie Industriel 6-Licence en Architecture 7-Licence en Génie de l'Environnement\n");
+       gotoxy(1,29);printf(">>");
        test2=Choix(0,7,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Certificat en Informatique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Faculte);
             break;
         case 1:
-            strcpy(NewUser.Section, "Licence en Génie Informatique");
+            strcpy(NewUser.Section, "Licence en Genie Informatique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                       ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Licence en Génie Civil");
+            strcpy(NewUser.Section, "Licence en Genie Civil");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                                ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
-            strcpy(NewUser.Section, "Licence en Génie Électrique-Energie électrique");
+            strcpy(NewUser.Section, "Genie Electrique-Energie electrique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 4:
-            strcpy(NewUser.Section, "Licence en Génie Électrique-Télécommunications");
+            strcpy(NewUser.Section, "Genie Electrique-Telecommunications");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                         ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 5:
-            strcpy(NewUser.Section, "Licence en Génie Industriel");
+            strcpy(NewUser.Section, "Licence en Genie Industriel");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 6:
             strcpy(NewUser.Section, "Licence en Architecture");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 7:
-            strcpy(NewUser.Section, "Licence en Génie de l'Environnement");
+            strcpy(NewUser.Section, "Licence en Genie de l'Environnement");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
    case 2:
        strcpy(NewUser.Faculte, "FSAE");
-       printf("Choisissez une Section. \n");
-       printf("0 : Ingénieur-agronome-Entrepreneuriat et Production\n1 : Santé Publique\n2 : Technicien Supérieur en Sciences Vétérinaires et Production Animale\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0 : Ingénieur agronome-Entrepreneuriat et Production 1 : Sante Publique");
+       gotoxy(1,28);printf("2 : Technicien Superieur en Sciences Vétérinaires et Production Animale");
+       gotoxy(1,29);printf(">>");
+
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Ingénieur-agronome-Entrepreneuriat et Production");
+            strcpy(NewUser.Section, "Ingenieur agronome-Entrepreneuriat et Production");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
-            strcpy(NewUser.Section, "Ingénieur-agronome-Sciences de la Vie et Technologie");
+            strcpy(NewUser.Section, "Ingenieur agronome-Sciences de la Vie et Technologie");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Technicien Supérieur en Sciences Vétérinaires et Production Animale");
+            strcpy(NewUser.Section, "Technicien Superieur en Sciences Veterinaires et Production Animale");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
     case 4:
        strcpy(NewUser.Faculte, " FSJP");
-       printf("Choisissez une Section. \n");
-       printf("0 : Certificat en Droit des affaires\n1 : Licence en Sciences Juridiques\n2 : Licence en Sciences Politiques\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0-Certificat en Droit des affaires 1-Licence en Sciences Juridiques 2-Licence en Sciences Politiques\n");
+       gotoxy(1,28);printf(">>");
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Certificat en Droit des affaires");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Licence en Sciences Juridiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
             strcpy(NewUser.Section, "Licence en Sciences Politiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
 
        break;
     case 3:
        strcpy(NewUser.Faculte, "FSED");
-       printf("Choisissez une Section. \n");
-       printf("0 : Licence en Sciences de l’Éducation\n1 :  Licence d’Enseignement\n2 : Maîtrise en Sciences de l’Éducation\n3 : Licence en Relations internationales\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0-Licence en Sciences de l’Education 1-Licence d’Enseignement 2-Maitrise en Sciences de l’Education 3-Licence en Relations internationales");
+       gotoxy(1,28);printf(">>");
        test2=Choix(0,3,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Licence en Sciences de l’Éducation");
+            strcpy(NewUser.Section, "Licence en Sciences de l’Education");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Licence d’Enseignement");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Maîtrise en Sciences de l’Éducation");
+            strcpy(NewUser.Section, "Maitrise en Sciences de l’Education");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
             strcpy(NewUser.Section, "Licence en Relations internationales");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
     case 5:
 
        strcpy(NewUser.Faculte, "FSSA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Médecine générale\n1 : Santé Publique\n2 : Soins infirmiers avec option Maladies Infectieuses\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       printf("Choisissez une Section. ");
+       printf("0-Medecine generale 1 : Sante Publique 2 : Soins infirmiers avec option Maladies Infectieuses\n");
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Médecine générale");
+            strcpy(NewUser.Section, "Medecine generale");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
-            strcpy(NewUser.Section, "Santé Publique");
+            strcpy(NewUser.Section, "Sante Publique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
             strcpy(NewUser.Section, "Soins infirmiers");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
 
@@ -541,9 +802,9 @@ switch ((test))
 	fwrite (&NewUser, sizeof(struct Student), 1, outfile);
 
 	if(fwrite != 0)
-		printf("Votre etudiant a ete enregistre avec succes. ");
+		{gotoxy(1,26);printf("Votre etudiant a ete enregistre avec succes. ");}
 	else
-		printf("Erreurs lors de l'enregistrement.\n");
+		{gotoxy(1,26);printf("Erreurs lors de l'enregistrement.");}
 
 	// close file
 	fclose (outfile);
@@ -560,201 +821,457 @@ int AddTeacher (int id , char *nom ,char *prenom )
 
 
     NewUser.Code = id;
-    printf("Veuillez choisir le type de professeur\n");
-    printf("0 : Titulaire\n1 : Travaux Pratiques\n2 : Travaux Dirigées\n");
-
+    gotoxy(1,26);printf("Veuillez choisir le type de professeur ");
+    gotoxy(1,27);printf("0 : Titulaire 1 : Travaux Pratiques 2 : Travaux Dirigées");
+    gotoxy(1,28);printf(">>");
     cur = Choix(0,2,"Veuillez choisir parmis la liste");
     switch ((cur))
     {
     case 0:
         strcpy(NewUser.Type, "Titulaire");
+        gotoxy(1,26);
+        printf("                                                                                                                                    ");
+        gotoxy(1,27);
+        printf("                                                                                                                                    ");
+        gotoxy(1,28);
+        printf("                                                                                                                                    ");
+        gotoxy(37,18);
+        printf("Type         : %s",NewUser.Type);
         break;
     case 1:
         strcpy(NewUser.Type, "Travaux Pratiques");
+        gotoxy(1,26);
+        printf("                                                                                                                                    ");
+        gotoxy(1,27);
+        printf("                                                                                                                                    ");
+        gotoxy(1,28);
+        printf("                                                                                                                                    ");
+        gotoxy(37,18);
+        printf("Type         : %s",NewUser.Type);
+
         break;
     case 2:
-        strcpy(NewUser.Type, "Travaux Dirigées");
+        strcpy(NewUser.Type, "Travaux Dirigees");
+        gotoxy(1,26);
+        printf("                                                                                                                                    ");
+        gotoxy(1,27);
+        printf("                                                                                                                                    ");
+        gotoxy(1,28);
+        printf("                                                                                                                                    ");
+        gotoxy(37,18);
+        printf("Type         : %s",NewUser.Type);
+
         break;
     }
-   printf("Veuillez choisir le nombre de cours");
+    gotoxy(1,26);printf("Veuillez choisir le nombre de cours");
    cur =0;
-   NewUser.Nbcours = Choix(1,20,"Veuillez choisir une valeur entre 1 et 20");
-    printf("Veuillez entrer les cours Dispenses :\n");
+    NewUser.Nbcours = Choix(1,20,"Veuillez choisir une valeur entre 1 et 20");
+   gotoxy(1,26);printf("                                                ");
+    gotoxy(1,26);printf("Veuillez entrer les cours Dispenses : ");
     char alt[100];
    for (cur = 1;cur<=NewUser.Nbcours;cur++)
    {
-       printf("Entrez le cours #%d",cur);
+      gotoxy(1,27+cur); printf("Entrez le cours #%d",cur);
         strcpy(alt,GetString());
         strcat(alt," - ");
 
    }
    strcpy(NewUser.Cours,alt);
-
-    printf("Choisissez une Faculté. \n");
-    printf("0 : Faculté des Sciences Économiques et Administratives (FSEA)\n1 : Faculté des Sciences, de Génie et d'Architecture (FSGA)\n2 : Faculté des Sciences de l’Agriculture et de l’Environnement (FSAE)\n3 : Faculté des Sciences Juridiques et Politiques (FSJP)\n4 : Faculté des Sciences de l'Education (FSED)\n5 : Faculté des Sciences de la Santé (FSSA)\n");
-    test=Choix(0,5,"Veuillez choisir par la liste!");
+   gotoxy(1,26);printf("                                                                                                 ");
+   gotoxy(1,27);printf("                                                                                                 ");
+   gotoxy(1,28);printf("                                                                                                 ");
+   gotoxy(37,19);
+        printf("Cours         : %s",NewUser.Cours);
+ gotoxy(1,26);printf("                                                                                                ");
+    gotoxy(1,27);printf("                                                                                             ");
+    gotoxy(1,26);printf("Choisissez une Faculte.");
+    gotoxy(1,27);printf("0-FSEA  1-FSGA 2-FSAE 3-FSJP 4-FSED 5-FSSA");
+    gotoxy(1,28);printf(">>");
+   test=Choix(0,5,"Veuillez choisir par la liste!");
+    gotoxy(1,26);printf("                                                                                                                                                                                              ");
+    gotoxy(1,27);printf("                                                                                                                                                                                                       ");
+    gotoxy(1,28);printf("                                                                                                                                                                                             ");
 
 switch ((test))
    {
    case 0:
+
        strcpy(NewUser.Faculte, "FSEA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Gestion des Ressources humaines\n1 : Gestion des Affaires\n2 :Comptabilité de Management \n3 : Micro finance\n4 : Gestion de Projet\n5 :Marketing \n6 : Sciences économiques\n7 : Sciences administratives-PME\n8 : Sciences administratives-Sciences comptables\n9 : Sciences administratives-Gestion touristique\n10 : Sciences administratives-Gestion des institutions financières\n");
-        printf("11 : Sciences administratives-Finance\n12 : Maîtrise en comptabilité:Contrôle-Audit\n13 : Maîtrise en gestion de projet\n");
-       test2=Choix(0,13,"Veuillez choisir par la liste!");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+      gotoxy(1,26); printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("1-Gestion des Ressources humaines 2-Gestion des Affaires 3-Comptabilite de Management 4-Micro finance");
+      gotoxy(1,28); printf("5-Gestion de Projet 6-Marketing 7-Sciences economiques 8-Sciences administratives-PME 9-Sciences administratives-Sciences comptables");
+      gotoxy(1,29);printf("10-Sciences administratives-Gestion touristique1 1-Sciences administratives-Gestion des institutions financieres");
+      gotoxy(1,30);printf("12-Sciences administratives-Finance 13-Maitrise en comptabilite:Controle-Audit 14-Maîtrise en gestion de projet");
+      gotoxy(1,31); test2=Choix(1,14,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Gestion des Ressources humaines");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Gestion des Affaires");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Comptabilité de Management");
+            strcpy(NewUser.Section, "Comptabilite de Management");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
             strcpy(NewUser.Section, "Micro finance");
             break;
         case 4:
             strcpy(NewUser.Section, "Gestion de Projet");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 5:
             strcpy(NewUser.Section, "Marketing");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 6:
-            strcpy(NewUser.Section, "Sciences économiques");
+            strcpy(NewUser.Section, "Sciences economiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 7:
             strcpy(NewUser.Section, "Sciences administratives-PME");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 8:
-            strcpy(NewUser.Section, "Sciences administratives-Sciences comptables");
+            strcpy(NewUser.Section, "Sciences Adm-Sciences comptables");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 9:
-            strcpy(NewUser.Section, "Sciences administratives-Gestion touristique");
+            strcpy(NewUser.Section, "Sciences Adm-Gestion touristique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 10:
-            strcpy(NewUser.Section, "Sciences administratives-Gestion des institutions financières");
+            strcpy(NewUser.Section, "Sciences Adm-Gestion institutions financieres");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 11:
-            strcpy(NewUser.Section, "Sciences administratives-Finance");
+            strcpy(NewUser.Section, "Sciences Adm-Finance");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 12:
-            strcpy(NewUser.Section, "Maîtrise en comptabilité:Contrôle-Audit");
+            strcpy(NewUser.Section, "Maitrise en comptabilite:Controle-Audit");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 13:
-            strcpy(NewUser.Section, "Maîtrise en gestion de projet");
+            strcpy(NewUser.Section, "Maitrise en gestion de projet");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
    case 1:
        strcpy(NewUser.Faculte, "FSGA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Certificat en Informatique\n1 : Licence en Génie Informatique\n2 : Licence en Génie Civil\n3 : Licence en Génie Électrique-Energie électrique\n4 : Licence en Génie Électrique-Télécommunications\n5 : Licence en Génie Industriel \n6 : Licence en Architecture\n7 : Licence en Génie de l'Environnement\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+      gotoxy(1,27); printf("0-Certificat en Informatique 1-Licence en Genie Informatique 2-Licence en Genie Civil 3-Licence en Genie Électrique-Energie electrique");
+      gotoxy(1,28); printf("4-Licence en Genie Electrique-Telecommunications 5-Licence en Genie Industriel 6-Licence en Architecture 7-Licence en Génie de l'Environnement\n");
+       gotoxy(1,29);printf(">>");
        test2=Choix(0,7,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Certificat en Informatique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Faculte);
             break;
         case 1:
-            strcpy(NewUser.Section, "Licence en Génie Informatique");
+            strcpy(NewUser.Section, "Licence en Genie Informatique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                       ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Licence en Génie Civil");
+            strcpy(NewUser.Section, "Licence en Genie Civil");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                                ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
-            strcpy(NewUser.Section, "Licence en Génie Électrique-Energie électrique");
+            strcpy(NewUser.Section, "Genie Electrique-Energie electrique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 4:
-            strcpy(NewUser.Section, "Licence en Génie Électrique-Télécommunications");
+            strcpy(NewUser.Section, "Genie Electrique-Telecommunications");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                         ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 5:
-            strcpy(NewUser.Section, "Licence en Génie Industriel");
+            strcpy(NewUser.Section, "Licence en Genie Industriel");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 6:
             strcpy(NewUser.Section, "Licence en Architecture");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 7:
-            strcpy(NewUser.Section, "Licence en Génie de l'Environnement");
+            strcpy(NewUser.Section, "Licence en Genie de l'Environnement");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                                            ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(1,30);printf("                                                                                                                                    ");
+            gotoxy(1,31);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
    case 2:
        strcpy(NewUser.Faculte, "FSAE");
-       printf("Choisissez une Section. \n");
-       printf("0 : Ingénieur-agronome-Entrepreneuriat et Production\n1 : Santé Publique\n2 : Technicien Supérieur en Sciences Vétérinaires et Production Animale\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0 : Ingénieur agronome-Entrepreneuriat et Production 1 : Sante Publique");
+       gotoxy(1,28);printf("2 : Technicien Superieur en Sciences Vétérinaires et Production Animale");
+       gotoxy(1,29);printf(">>");
+
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Ingénieur-agronome-Entrepreneuriat et Production");
+            strcpy(NewUser.Section, "Ingenieur agronome-Entrepreneuriat et Production");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
-            strcpy(NewUser.Section, "Ingénieur-agronome-Sciences de la Vie et Technologie");
+            strcpy(NewUser.Section, "Ingenieur agronome-Sciences de la Vie et Technologie");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Technicien Supérieur en Sciences Vétérinaires et Production Animale");
+            strcpy(NewUser.Section, "Technicien Superieur en Sciences Veterinaires et Production Animale");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(1,29);printf("                                                                                                                                    ");
+            gotoxy(37,21);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
     case 4:
        strcpy(NewUser.Faculte, " FSJP");
-       printf("Choisissez une Section. \n");
-       printf("0 : Certificat en Droit des affaires\n1 : Licence en Sciences Juridiques\n2 : Licence en Sciences Politiques\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0-Certificat en Droit des affaires 1-Licence en Sciences Juridiques 2-Licence en Sciences Politiques\n");
+       gotoxy(1,28);printf(">>");
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
             strcpy(NewUser.Section, "Certificat en Droit des affaires");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Licence en Sciences Juridiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
             strcpy(NewUser.Section, "Licence en Sciences Politiques");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
 
        break;
     case 3:
        strcpy(NewUser.Faculte, "FSED");
-       printf("Choisissez une Section. \n");
-       printf("0 : Licence en Sciences de l’Éducation\n1 :  Licence d’Enseignement\n2 : Maîtrise en Sciences de l’Éducation\n3 : Licence en Relations internationales\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       gotoxy(1,26);printf("Choisissez une Section. ");
+       gotoxy(1,27);printf("0-Licence en Sciences de l’Education 1-Licence d’Enseignement 2-Maitrise en Sciences de l’Education 3-Licence en Relations internationales");
+       gotoxy(1,28);printf(">>");
        test2=Choix(0,3,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Licence en Sciences de l’Éducation");
+            strcpy(NewUser.Section, "Licence en Sciences de l’Education");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
             strcpy(NewUser.Section, "Licence d’Enseignement");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
-            strcpy(NewUser.Section, "Maîtrise en Sciences de l’Éducation");
+            strcpy(NewUser.Section, "Maitrise en Sciences de l’Education");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 3:
             strcpy(NewUser.Section, "Licence en Relations internationales");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
        break;
     case 5:
 
        strcpy(NewUser.Faculte, "FSSA");
-       printf("Choisissez une Section. \n");
-       printf("0 : Médecine générale\n1 : Santé Publique\n2 : Soins infirmiers avec option Maladies Infectieuses\n");
+        gotoxy(37,20);printf("Faculte         : %s",NewUser.Faculte);
+       printf("Choisissez une Section. ");
+       printf("0-Medecine generale 1 : Sante Publique 2 : Soins infirmiers avec option Maladies Infectieuses\n");
        test2=Choix(0,2,"Veuillez choisir par la liste!");
         switch ((test2))
         {
         case 0:
-            strcpy(NewUser.Section, "Médecine générale");
+            strcpy(NewUser.Section, "Medecine generale");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 1:
-            strcpy(NewUser.Section, "Santé Publique");
+            strcpy(NewUser.Section, "Sante Publique");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         case 2:
             strcpy(NewUser.Section, "Soins infirmiers");
+            gotoxy(1,26);printf("                                                                                                                                    ");
+            gotoxy(1,27);printf("                                                                                                                                    ");
+            gotoxy(1,28);printf("                                                                                                                                    ");
+            gotoxy(37,20);printf("Section         : %s",NewUser.Section);
             break;
         }
 
@@ -781,9 +1298,9 @@ switch ((test))
 	fwrite (&NewUser, sizeof(struct Teacher), 1, outfile);
 
 	if(fwrite != 0)
-		printf("Votre etudiant a ete enregistre avec succes. ");
+		{gotoxy(1,26);printf("Votre Professeur a ete enregistre avec succes. ");}
 	else
-		printf("Erreurs lors de l'enregistrement.\n");
+		{gotoxy(1,26);printf("Erreurs lors de l'enregistrement.\n");}
 
 	// close file
 	fclose (outfile);
@@ -803,25 +1320,29 @@ int AddPersonnel (int id , char *nom ,char *prenom)
     cur = current_time->tm_year + 1900;
 
     NewUser.Code=id;
-    printf("Veuillez entrer l'annee d'entree en fonction\n");
+    gotoxy(1,26);printf("Veuillez entrer l'annee d'entree en fonction ");
     NewUser.Annee=Choix(1988,cur,"Veuillez entrer une annee entre 1988 et l'annee actuelle!");
+    gotoxy(37,18);printf("Entree en fonction     :  %d",NewUser.Annee);
+    gotoxy(1,26);printf("                                                                                ");
 
-    printf("Veuillez entrer la Direction d’Affectation. \n");
+    gotoxy(1,26);printf("Veuillez entrer la Direction d’Affectation. ");
     strcpy(NewUser.Affectation, GetString());
+    gotoxy(37,19);printf("Direction d’Affectation :  %d",NewUser.Affectation);
+    gotoxy(1,26);printf("                                                                                ");
 
-    printf("Veuillez entrer le poste. \n");
+    gotoxy(1,26);printf("Veuillez entrer le poste. ");
     strcpy(NewUser.Poste, GetString());
+    gotoxy(37,20);printf("Poste                   :  %d",NewUser.Poste);
+    gotoxy(1,26);printf("                                                                                ");
 
-    printf("Veuillez entrer le Supérieur Hiérarchique. \n");
+    gotoxy(1,26);printf("Veuillez entrer le Supérieur Hiérarchique. \n");
     strcpy(NewUser.Superieur, GetString());
+    gotoxy(37,21);printf("Poste                   :  %d",NewUser.Poste);
+    gotoxy(1,26);printf("                                                                                ");
+
 
    AdmPers(NewUser.Code , nom ,prenom,NewUser.Affectation,NewUser.Poste);
 
-   printf("New personnel infos \n");
-   printf("ID : %d\nAffectation : %s\n",NewUser.Code,NewUser.Affectation);
-   printf("POste : %s\n",NewUser.Poste);
-   printf("Superieur : %s\n",NewUser.Superieur);
-   printf("Anne Admission : %d\n",NewUser.Annee);
 
     FILE *outfile;
 
@@ -838,10 +1359,13 @@ int AddPersonnel (int id , char *nom ,char *prenom)
 	fwrite (&NewUser, sizeof(struct PersonAdm), 1, outfile);
 
 	if(fwrite != 0)
-		printf("Votre etudiant a ete enregistre avec succes. ");
+		{gotoxy(1,26);printf("Personnel Administratif enregistre avec succes. ");
+		gotoxy(1,26);printf("                                                                                ");
+		}
 	else
-		printf("Erreurs lors de l'enregistrement.\n");
-
+		{gotoxy(1,26);printf("Erreurs lors de l'enregistrement.\n");
+        gotoxy(1,26);printf("                                                                                ");
+		}
 	// close file
 	fclose (outfile);
 }
@@ -1055,11 +1579,14 @@ int AdmProf(int code , char *nom ,char *prenom,int NbrCours)
     strcpy(input.Prenom, prenom);
     input.Nbcours = NbrCours;
 
-    printf("Veuillez entrer le Salaire.");
+    gotoxy(1,26);printf("Veuillez entrer le salaire. ");
     strcpy(input.Salaire, MoneyTester());
-    printf("Veuillez entrer le nombre de Credit.");
+     gotoxy(37,21);printf("Salaire             :%s",input.Salaire);
+    gotoxy(1,26);printf("                                               ");
+    gotoxy(1,26);printf("Veuillez entrer le nombre de Credit.");
     input.Nbcredit = Choix(1,100,"Choisissez une valeur de credit entre 1 et 100");
-
+     gotoxy(37,21);printf("Nombre de Credit     :%s",input.Nbcredit);
+    gotoxy(1,26);printf("                                               ");
 
      FILE *outfile;
 
@@ -1071,7 +1598,7 @@ int AdmProf(int code , char *nom ,char *prenom,int NbrCours)
 		exit (1);
 	}
 
-	printf ("---Infos------\n -%d\n-%s\n-%s\n-%s\n-%d\n-%d\n",input.Code,input.Nom,input.Prenom,input.Salaire,input.Nbcours,input.Nbcredit);
+
 	// write struct to file
 	fwrite (&input, sizeof(struct AdmTeacher), 1, outfile);
 
@@ -1123,8 +1650,10 @@ int AdmPers(int code , char *nom ,char *prenom,char *direction,char *fonction)
 
 
 
-    printf("Veuillez entrer le salaire de l'employe.\n");
+    gotoxy(1,26);printf("Veuillez entrer le salaire de l'employe.");
     strcpy(input.Salaire, MoneyTester());
+    gotoxy(37,21);printf("Salaire             :%s",input.Salaire);
+    gotoxy(1,26);printf("                                               ");
      FILE *outfile;
 
 	// open file for writing
@@ -1135,16 +1664,10 @@ int AdmPers(int code , char *nom ,char *prenom,char *direction,char *fonction)
 		exit (1);
 	}
 
-	printf ("---Infos------\n -%d\n-%s\n-%s\n-%s\n-%s\n-%s\n",input.Code,input.NomEmp,input.PrenomEmp,input.Direction,input.Fonction,input.Salaire);
-	// write struct to file
+
 	fwrite (&input, sizeof(struct AdmPers), 1, outfile);
 
-	if(fwrite != 0)
-		printf("Enregistrement realise avec succes.\n");
-	else
-		printf("Erreurs lors de l'enregistrement.\n");
 
-	// close file
 	fclose (outfile);
 
 }
@@ -1158,10 +1681,14 @@ int AdmEtud(int code , char *nom ,char *prenom,char *faculte)
     strcpy(input.Faculte, faculte);
 
 
-    printf("Veuillez entrer le montant a payer.\n");
+    gotoxy(1,26);printf("Veuillez entrer le montant a payer.\n");
     strcpy(input.Montant, MoneyTester());
-    printf("Veuillez entrer la date du prochain versement (format :xx/xx/xxxx).\n");
+    gotoxy(37,22);printf("Montant          :%s",input.Montant);
+    gotoxy(1,26);printf("                                                                                 ");
+   gotoxy(1,26); printf("Veuillez entrer la date du prochain versement (format :xx/xx/xxxx).\n");
     strcpy(input.Date, GetDate());
+    gotoxy(37,23);printf("Date          :%s",input.Date);
+    gotoxy(1,26);printf("                                                                                             ");
 
      FILE *outfile;
 
@@ -1173,16 +1700,10 @@ int AdmEtud(int code , char *nom ,char *prenom,char *faculte)
 		exit (1);
 	}
 
-	printf ("---Infos------\n -%d\n-%s\n-%s\n-%s\n-%s\n-%s\n",input.Code,input.NomEtud,input.PrenomEtud,input.Faculte,input.Date,input.Montant);
-	// write struct to file
+
 	fwrite (&input, sizeof(struct AdmStudent), 1, outfile);
 
-	if(fwrite != 0)
-		printf("Enregistrement realise avec succes.\n");
-	else
-		printf("Erreurs lors de l'enregistrement.\n");
 
-	// close file
 	fclose (outfile);
 
 }

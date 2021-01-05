@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1609642795 source:c:\users\alt\documents\manager\main.c
+1609815440 source:c:\users\alt\documents\manager\main.c
 	"headers.h"
 
-1609713796 c:\users\alt\documents\manager\headers.h
+1609803810 c:\users\alt\documents\manager\headers.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -14,12 +14,12 @@
 1609624273 source:c:\users\alt\documents\manager\template.c
 	"headers.h"
 
-1609711391 source:c:\users\alt\documents\manager\test.c
+1609715124 source:c:\users\alt\documents\manager\test.c
 	"headers.h"
 
-1609645222 source:c:\users\alt\documents\manager\functions.c
+1609815333 source:c:\users\alt\documents\manager\functions.c
 	"headers.h"
 
-1609710674 source:c:\users\alt\documents\manager\graphicfunctions.c
+1609815063 source:c:\users\alt\documents\manager\graphicfunctions.c
 	"headers.h"
 

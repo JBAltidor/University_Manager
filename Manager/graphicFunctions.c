@@ -202,17 +202,18 @@ int main_window()
         switch(choice){
             case 1:
                 clearMainWindow();
-                gotoxy(x,8);printf("1. Lister les Administrateurs");
-                gotoxy(x,10);printf("2. Lister les Etudiants");
-                gotoxy(x,12);printf("3. Lister les Professeurs");
-                gotoxy(x,14);printf("4. Lister Agents Administratifs");
-                gotoxy(x,16);printf("5. Lister les Bibliothecaires");
-                gotoxy(x,18);printf("6. Modifier Mot de Passe");
-                gotoxy(x,20);printf("7. Sortir");
-                gotoxy(x,22);printf("Faites votre choix ");
-        gotoxy(x,23);printf(">>");
-        choice = Choix2(1,7,"Veuillez choisir entre 1 et 7",x+3,21);
-                if (choice == 7)main_window();
+                gotoxy(x,8);printf("1. Ajouter Utilisateur");
+                gotoxy(x,9);printf("2. Modifier Mot de Passe");
+                gotoxy(x,10);printf("3. Lister les Administrateurs");
+                gotoxy(x,11);printf("4. Lister Agents Administratifs");
+                gotoxy(x,12);printf("5. Lister les Bibliothecaires");
+                gotoxy(x,13);printf("6. Lister les Etudiants");
+                gotoxy(x,14);printf("7. Lister les Professeurs");
+                gotoxy(x,15);printf("8. Sortir");
+                gotoxy(x,17);printf("Faites votre choix ");
+        gotoxy(x,18);printf(">>");
+        choice = Choix2(1,8,"Veuillez choisir entre 1 et 8",x+3,18);
+                if (choice == 8)main_window();
                 print_heading("Gestion des acces");
                 GAccess(choice);main_window();
                 break;
@@ -263,6 +264,7 @@ int main_window()
                 print_heading("Au revoir! ");
                 exit(1);
 
+
         }
 
 
@@ -272,7 +274,7 @@ int Start(){
     ClearConsoleToColors(25,15);
     SetConsoleTitle("Gestionnaire UniQ");
     window();
-    GetAccess();
+   GetAccess();
     main_window();
     return 0;
 }
@@ -282,17 +284,17 @@ void GAccess(int choix)
     switch(choix)
         {
 
-        case 1:
+        case 3:
             gotoxy(37,10);printf("Liste Administrateurs ");
             gotoxy(37,12);printf("Verifiez le fichier 'ReportAdmin.txt'.");
             Report(0);
             break;
-        case 2:
+        case 6:
             gotoxy(37,10);printf("Liste Etudiants ");
             gotoxy(37,12);printf("Verifiez 'ReportEtudiants.txt'.");
             Report(1);
             break;
-        case 3:
+        case 7:
             gotoxy(37,10);printf("Liste Professeurs ");
             gotoxy(37,12);printf("Verifiez 'ReportProfesseurs.txt'.");
             Report(2);
@@ -308,7 +310,7 @@ void GAccess(int choix)
             gotoxy(37,12);printf("Verifiez 'ReportBibliothecaire.txt'.");
             Report(4);
             break;
-        case 6:
+        case 2:
              gotoxy(37,10);printf("Modifier Mot de Passe ");
              gotoxy(37,12);printf("Entrez le Code d l'utilisateur ");
 
@@ -328,6 +330,11 @@ void GAccess(int choix)
 
 
             break;
+            case 1:
+                AddUser ();
+
+            break;
+
         }
 
          gotoxy(1,27);printf("Pressez 'Enter' pour retourner");
@@ -470,3 +477,6 @@ char * MoneyTester2(int a)
     }
 
 }
+
+
+

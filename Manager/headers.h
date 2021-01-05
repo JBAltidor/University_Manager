@@ -181,3 +181,6 @@ void GCours(int choix);
 int Choix2(int min,int max , char *warning,int x,int y);
 char * MoneyTester2(int a) ;
 void GAdminPerson (int choix);
+void adjustWindowSize();
+
+
