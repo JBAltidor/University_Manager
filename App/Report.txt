@@ -1,3 +1,0 @@
-Code	Prenom	Nom	
-3		Ally		Alfonse
-9		J.B		Altidor
