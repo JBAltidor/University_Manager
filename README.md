@@ -1,2 +1,2 @@
-# University_Mangaer
+# University_Manager
 Simple University manager in C
